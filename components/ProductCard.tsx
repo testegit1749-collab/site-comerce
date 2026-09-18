@@ -62,14 +62,14 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
         </div>
 
         <div className="p-4 sm:p-5">
-          <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#8a6a35]">{product.category}</p>
-          <h3 className="mt-1.5 font-serif-display text-[19px] font-medium leading-tight sm:text-[22px]">
+          <p className="truncate text-[10px] font-bold uppercase tracking-[0.22em] text-[#8a6a35]">{product.category}</p>
+          <h3 className="mt-1.5 line-clamp-2 min-h-[2.5em] font-serif-display text-[19px] font-medium leading-tight sm:text-[22px]">
             {product.name}
           </h3>
           <div className="mt-2 flex items-end justify-between gap-2">
-            <p className="text-[11px] uppercase tracking-[0.14em] text-[#6f6a61]">Cód. {product.code}</p>
+            <p title={`Código ${product.code}`} className="min-w-0 flex-1 truncate text-[11px] uppercase tracking-[0.14em] text-[#6f6a61]">Cód. {product.code}</p>
             {settings.showPrices && product.showPrice && (
-              <div className="text-right">
+              <div className="shrink-0 text-right">
                 {off && product.compareAtPrice ? (
                   <p className="text-xs tabular-nums text-[#a39c8e] line-through">{formatPrice(product.compareAtPrice)}</p>
                 ) : null}

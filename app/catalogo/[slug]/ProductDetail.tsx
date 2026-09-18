@@ -86,7 +86,7 @@ export default function ProductDetail({ slug }: { slug: string }) {
             <h1 className="mt-4 font-serif-display text-4xl font-medium leading-[1.02] sm:text-6xl">
               {product.name}
             </h1>
-            <p className="mt-3 text-[12px] font-medium uppercase tracking-[0.24em] text-[#6f6a61]">
+            <p className="mt-3 break-all text-[12px] font-medium uppercase tracking-[0.24em] text-[#6f6a61]">
               Código {product.code}
             </p>
 
