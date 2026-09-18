@@ -241,23 +241,35 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   const toggleField = useCallback(
     async (id: string, field: "featured" | "isNew" | "status" | "showPrice") => {
+      const cur = products.find((p) => p.id === id);
+      if (!cur) return;
+      const next: boolean | string =
+        field === "status"
+          ? cur.status === "active" ? "inactive" : "active"
+          : !(cur as unknown as Record<string, boolean>)[field];
       setProducts((prev) =>
-        prev.map((p) => {
-          if (p.id !== id) return p;
-          if (field === "status") return { ...p, status: p.status === "active" ? "inactive" : "active" } as Product;
-          return { ...p, [field]: !(p as unknown as Record<string, boolean>)[field] };
-        })
+        prev.map((p) => (p.id === id ? ({ ...p, [field]: next } as Product) : p))
       );
+      if (isSupabaseConfigured) {
+        try {
+          const column =
+            field === "isNew" ? "is_new" : field === "showPrice" ? "show_price" : field;
+          await getSupabase()!.from("products").update({ [column]: next }).eq("id", id);
+        } catch {}
+      }
     },
-    []
+    [products]
   );
 
   const saveCategory = useCallback(
     async (name: string, image?: string, id?: string) => {
+      const slug = slugify(name);
       if (id) {
-        setCategories((prev) => prev.map((c) => (c.id === id ? { ...c, name, slug: slugify(name), image: image ?? c.image } : c)));
+        const cur = categories.find((c) => c.id === id);
+        setCategories((prev) => prev.map((c) => (c.id === id ? { ...c, name, slug, image: image ?? c.image } : c)));
+        persistSupabase("categories", { name, slug, image: image ?? cur?.image ?? null, sort_order: cur?.sortOrder ?? 0 }, id);
       } else {
-        const cat: Category = { id: uid("cat"), name, slug: slugify(name), image, sortOrder: categories.length + 1 };
+        const cat: Category = { id: uid("cat"), name, slug, image, sortOrder: categories.length + 1 };
         setCategories((prev) => [...prev, cat]);
         persistSupabase("categories", { id: cat.id, name, slug: cat.slug, image, sort_order: cat.sortOrder });
       }
@@ -267,22 +279,35 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   const deleteCategory = useCallback(async (id: string) => {
     setCategories((prev) => prev.filter((c) => c.id !== id));
+    if (isSupabaseConfigured) {
+      try {
+        await getSupabase()!.from("categories").delete().eq("id", id);
+      } catch {}
+    }
   }, []);
 
   const saveCollection = useCallback(
     async (name: string, description?: string, id?: string) => {
+      const slug = slugify(name);
       if (id) {
-        setCollections((prev) => prev.map((c) => (c.id === id ? { ...c, name, slug: slugify(name), description } : c)));
+        setCollections((prev) => prev.map((c) => (c.id === id ? { ...c, name, slug, description } : c)));
+        persistSupabase("collections", { name, slug, description: description ?? null }, id);
       } else {
-        const col: Collection = { id: uid("col"), name, slug: slugify(name), description };
+        const col: Collection = { id: uid("col"), name, slug, description };
         setCollections((prev) => [...prev, col]);
+        persistSupabase("collections", { id: col.id, name, slug: slug, description: description ?? null });
       }
     },
-    []
+    [persistSupabase]
   );
 
   const deleteCollection = useCallback(async (id: string) => {
     setCollections((prev) => prev.filter((c) => c.id !== id));
+    if (isSupabaseConfigured) {
+      try {
+        await getSupabase()!.from("collections").delete().eq("id", id);
+      } catch {}
+    }
   }, []);
 
   const saveSettings = useCallback(

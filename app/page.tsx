@@ -11,6 +11,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { InstagramIcon } from "@/components/InstagramIcon";
+import { SmartImage } from "@/components/SmartImage";
 import { WaterHero } from "@/components/WaterHero";
 import { Reveal } from "@/components/Reveal";
 import { Marquee } from "@/components/Marquee";
@@ -168,13 +169,13 @@ export default function HomePage() {
                 href={`/catalogo?categoria=${encodeURIComponent(c.name)}`}
                 className="group relative block overflow-hidden rounded-[24px] bg-[#0a0b0d] card-shadow"
               >
-                <div className="aspect-[3/4] overflow-hidden">
+                <div className="relative aspect-[3/4] overflow-hidden">
                   {c.image && (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
+                    <SmartImage
                       src={c.image}
                       alt={c.name}
-                      loading="lazy"
+                      fill
+                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
                       className="h-full w-full object-cover opacity-90 transition-all duration-[1.1s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110 group-hover:opacity-70"
                     />
                   )}
@@ -360,11 +361,11 @@ export default function HomePage() {
                       <InstagramIcon size={12} /> stories
                     </span>
                     <div className="rounded-[26px] bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] p-[3px] shadow-2xl">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
+                      <SmartImage
                         src="https://images.unsplash.com/photo-1617038220319-276d3cfab638?auto=format&fit=crop&w=600&q=80"
                         alt="Modelo usando brincos dourados"
-                        loading="lazy"
+                        width={480}
+                        height={640}
                         className="h-80 w-60 rounded-[23px] object-cover"
                       />
                     </div>
@@ -376,11 +377,11 @@ export default function HomePage() {
                       <InstagramIcon size={12} /> reels
                     </span>
                     <div className="rounded-[26px] border border-[#c49c6b]/40 p-[3px] shadow-2xl">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
+                      <SmartImage
                         src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80"
                         alt="Colar dourado em detalhe"
-                        loading="lazy"
+                        width={480}
+                        height={640}
                         className="h-80 w-60 rounded-[23px] object-cover"
                       />
                     </div>

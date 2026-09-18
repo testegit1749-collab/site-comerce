@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { MessageCircle } from "lucide-react";
 import { InstagramIcon } from "./InstagramIcon";
+import { SmartImage } from "./SmartImage";
 import { useStore } from "@/lib/store";
 import { whatsappLink, infoMessage, orderMessage, instagramHandle } from "@/lib/utils";
 
@@ -27,11 +28,11 @@ export function Footer() {
         {/* marca */}
         <div>
           <Link href="/" className="flex items-center gap-3">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <SmartImage
               src="/logo-mark.jpg"
               alt={`Logo ${settings.brandName}`}
-              loading="lazy"
+              width={96}
+              height={96}
               className="h-12 w-12 rounded-full object-cover ring-1 ring-[#c49c6b]/60"
             />
             <span className="leading-tight">

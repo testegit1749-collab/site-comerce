@@ -57,7 +57,7 @@ export default function AdminProducts() {
               <p className="truncate text-sm font-semibold">{p.name}</p>
               <p className="text-xs text-[#6f6a61]">{p.code} · {p.category} {p.featured ? "· ★" : ""} {p.isNew ? "· Novo" : ""} {p.status === "inactive" ? "· Pausado" : ""}</p>
             </div>
-            <div className="flex items-center gap-1">
+            <div className="flex shrink-0 flex-wrap items-center justify-end gap-1 sm:max-w-[220px]">
               <IconBtn title="Editar" onClick={() => openEdit(p)}><Pencil size={15} /></IconBtn>
               <IconBtn title="Duplicar" onClick={() => duplicateProduct(p.id)}><Copy size={15} /></IconBtn>
               <IconBtn title="Destaque" active={p.featured} onClick={() => toggleField(p.id, "featured")}><Star size={15} /></IconBtn>

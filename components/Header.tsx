@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Menu, X, Search, MessageCircle, Lock, LayoutDashboard } from "lucide-react";
 import { InstagramIcon } from "./InstagramIcon";
+import { SmartImage } from "./SmartImage";
 import { useStore } from "@/lib/store";
 import { whatsappLink, catalogMessage } from "@/lib/utils";
 
@@ -42,10 +43,11 @@ export function Header() {
       >
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
           <Link href="/" className="flex items-center gap-2.5">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <SmartImage
               src={settings.logo || "/logo-mark.jpg"}
               alt={`Logo ${settings.brandName}`}
+              width={80}
+              height={80}
               className="h-10 w-10 rounded-full object-cover ring-1 ring-[#c49c6b]/60"
             />
             <span className="flex flex-col leading-none">

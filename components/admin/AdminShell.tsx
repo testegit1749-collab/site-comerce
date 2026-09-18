@@ -60,7 +60,7 @@ export function AdminShell({ children, title, subtitle }: { children: React.Reac
         </aside>
 
         <section className="min-w-0">
-          <h1 className="font-serif-display text-4xl">{title}</h1>
+          <h1 className="font-serif-display text-3xl sm:text-4xl">{title}</h1>
           {subtitle && <p className="mt-1 text-sm text-[#6f6a61]">{subtitle}</p>}
           <div className="mt-6">{children}</div>
         </section>

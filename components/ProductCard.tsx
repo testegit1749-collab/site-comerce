@@ -6,6 +6,7 @@ import { ArrowUpRight, Sparkles } from "lucide-react";
 import type { Product } from "@/lib/types";
 import { formatPrice, discountPercent } from "@/lib/utils";
 import { useStore } from "@/lib/store";
+import { SmartImage } from "./SmartImage";
 
 export function ProductCard({ product, index = 0 }: { product: Product; index?: number }) {
   const { settings } = useStore();
@@ -23,11 +24,11 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
         className="group block overflow-hidden rounded-[26px] border border-[#141210]/[0.06] bg-white card-shadow transition-all duration-500 hover:-translate-y-2 hover:border-[#c49c6b]/50"
       >
         <div className="relative aspect-[4/5] overflow-hidden bg-[#ece2d0]">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <SmartImage
             src={img}
             alt={product.name}
-            loading="lazy"
+            fill
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
             className="h-full w-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.08]"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/0 to-black/0 opacity-60 transition-opacity duration-500 group-hover:opacity-90" />

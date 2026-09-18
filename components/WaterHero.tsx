@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { SmartImage } from "./SmartImage";
 
 /**
  * Efeito "d'água" leve e performático:
@@ -12,14 +13,17 @@ export function WaterHero({ image, children }: { image: string; children: React.
   const filterRef = useRef<SVGFETurbulenceElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLDivElement>(null);
+  const imgElRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     const weak =
       window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
-      window.matchMedia("(max-width: 640px)").matches && (navigator.hardwareConcurrency || 8) <= 4 ||
+      window.matchMedia("(max-width: 768px)").matches ||
       (navigator as unknown as { connection?: { saveData?: boolean } }).connection?.saveData;
 
-    if (weak) return; // sem efeito pesado
+    if (weak) return; // sem efeito pesado no celular
+    // aplica o filtro só quando o efeito vai rodar (economiza GPU no mobile)
+    if (imgElRef.current) imgElRef.current.style.filter = "url(#eliluz-water) saturate(1.05)";
 
     let raf = 0;
     let visible = true;
@@ -68,13 +72,15 @@ export function WaterHero({ image, children }: { image: string; children: React.
       </svg>
 
       <div ref={imgRef} className="absolute inset-0 transition-transform duration-300 will-change-transform" style={{ transform: "scale(1.06)" }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <SmartImage
+          ref={imgElRef}
           src={image}
           alt=""
+          fill
+          sizes="100vw"
+          priority
+          fetchPriority="high"
           className="h-full w-full object-cover"
-          style={{ filter: "url(#eliluz-water) saturate(1.05)" }}
-          loading="eager"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#1a1815]/70 via-[#1a1815]/25 to-[#1a1815]/10" />
         <div className="absolute inset-0 bg-[radial-gradient(80%_60%_at_50%_10%,transparent,rgba(26,24,21,0.35))]" />
