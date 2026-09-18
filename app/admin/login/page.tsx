@@ -8,7 +8,7 @@ import { useStore } from "@/lib/store";
 export default function AdminLoginPage() {
   const { login, isAdmin, authError } = useStore();
   const router = useRouter();
-  const [email, setEmail] = useState("admin@eliluz.com.br");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
   const [localError, setLocalError] = useState<string | null>(null);
