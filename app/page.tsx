@@ -5,19 +5,19 @@ import { motion } from "framer-motion";
 import {
   ArrowRight,
   ArrowUpRight,
-  Camera,
   Gem,
   MessageCircle,
   Search,
   ShieldCheck,
 } from "lucide-react";
+import { InstagramIcon } from "@/components/InstagramIcon";
 import { WaterHero } from "@/components/WaterHero";
 import { Reveal } from "@/components/Reveal";
 import { Marquee } from "@/components/Marquee";
 import { SectionHeading } from "@/components/SectionHeading";
 import { ProductCard } from "@/components/ProductCard";
 import { useStore } from "@/lib/store";
-import { whatsappLink, catalogMessage } from "@/lib/utils";
+import { whatsappLink, catalogMessage, instagramHandle } from "@/lib/utils";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -39,6 +39,7 @@ export default function HomePage() {
     .find((c) => c.items.length > 0);
 
   const countByCat = (name: string) => active.filter((p) => p.category === name).length;
+  const instaHandle = instagramHandle(settings.instagram);
 
   return (
     <div>
@@ -311,24 +312,38 @@ export default function HomePage() {
       {/* ══════════ INSTAGRAM ══════════ */}
       <section className="mx-auto max-w-7xl px-4 pt-20 sm:px-6 sm:pt-28">
         <Reveal>
-          <div className="relative overflow-hidden rounded-[32px] bg-[#0a0b0d] p-8 text-white card-shadow sm:p-14">
+          <div className="group/ig-section relative overflow-hidden rounded-[32px] bg-[#0a0b0d] p-8 text-white card-shadow sm:p-14">
             <div className="gold-glow pointer-events-none absolute -right-20 -top-20 h-96 w-96" />
+            <div className="pointer-events-none absolute -bottom-32 -left-24 h-96 w-96 rounded-full bg-gradient-to-tr from-[#f9ce34]/15 via-[#ee2a7b]/15 to-[#6228d7]/15 blur-3xl" />
             <div className="relative z-10 grid items-center gap-10 lg:grid-cols-2">
               <div>
                 <p className="flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.32em] text-[#c49c6b]">
-                  <span className="inline-block h-px w-10 bg-[#c49c6b]/60" /> Instagram
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-insta-ping absolute inline-flex h-full w-full rounded-full bg-[#ee2a7b]" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-[#ee2a7b]" />
+                  </span>
+                  Instagram · {instaHandle}
                 </p>
                 <h2 className="mt-3 font-serif-display text-4xl leading-tight sm:text-6xl">
                   Bastidores, provadores <em className="gold-text font-accent">e novidades</em> em primeira mão.
                 </h2>
-                <div className="mt-8 flex flex-wrap gap-3">
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {["Bastidores", "Provadores", "Peças exclusivas"].map((chip) => (
+                    <span key={chip} className="rounded-full border border-white/15 px-4 py-1.5 text-xs font-medium text-white/70 transition-colors hover:border-[#ee2a7b]/60 hover:text-white">
+                      {chip}
+                    </span>
+                  ))}
+                </div>
+                <div className="mt-8 flex flex-wrap items-center gap-3">
                   <a
                     href={settings.instagram}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#e8cf9c] to-[#c49c6b] px-8 py-4 text-sm font-bold text-[#0a0b0d] transition-transform hover:scale-[1.03]"
+                    aria-label={`Seguir ${instaHandle} no Instagram`}
+                    className="btn-shine inline-flex items-center gap-2.5 rounded-full bg-gradient-to-r from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] bg-[length:160%_auto] px-8 py-4 text-sm font-bold text-white shadow-[0_12px_36px_-10px_rgba(238,42,123,0.65)] transition-all duration-300 hover:bg-right hover:shadow-[0_16px_44px_-8px_rgba(238,42,123,0.8)] active:scale-95"
                   >
-                    <Camera size={17} /> Seguir perfil
+                    <InstagramIcon size={18} className="relative z-[2] transition-transform duration-300 group-hover/ig-section:rotate-0 hover:rotate-12 hover:scale-110" />
+                    <span className="relative z-[2]">Seguir {instaHandle}</span>
                   </a>
                   <Link
                     href="/catalogo"
@@ -338,21 +353,39 @@ export default function HomePage() {
                   </Link>
                 </div>
               </div>
-              <div className="relative hidden justify-center lg:flex">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="https://images.unsplash.com/photo-1617038220319-276d3cfab638?auto=format&fit=crop&w=600&q=80"
-                  alt="Modelo usando brincos dourados"
-                  loading="lazy"
-                  className="h-80 w-60 rotate-[-6deg] rounded-[24px] border border-white/15 object-cover shadow-2xl"
-                />
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80"
-                  alt="Colar dourado em detalhe"
-                  loading="lazy"
-                  className="h-80 w-60 rotate-[6deg] rounded-[24px] border border-[#c49c6b]/40 object-cover shadow-2xl"
-                />
+              <div className="relative hidden justify-center gap-6 lg:flex">
+                <div className="animate-float-soft">
+                  <div className="relative -rotate-6 transition-all duration-500 hover:rotate-0 hover:scale-[1.04]">
+                    <span className="absolute -top-3 left-4 z-10 flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-[11px] font-bold text-black shadow-lg">
+                      <InstagramIcon size={12} /> stories
+                    </span>
+                    <div className="rounded-[26px] bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] p-[3px] shadow-2xl">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src="https://images.unsplash.com/photo-1617038220319-276d3cfab638?auto=format&fit=crop&w=600&q=80"
+                        alt="Modelo usando brincos dourados"
+                        loading="lazy"
+                        className="h-80 w-60 rounded-[23px] object-cover"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="animate-float-soft-delay mt-10">
+                  <div className="relative rotate-6 transition-all duration-500 hover:rotate-0 hover:scale-[1.04]">
+                    <span className="absolute -top-3 right-4 z-10 flex items-center gap-1.5 rounded-full bg-[#0a0b0d]/85 px-3 py-1.5 text-[11px] font-bold text-[#f2dbbb] shadow-lg backdrop-blur">
+                      <InstagramIcon size={12} /> reels
+                    </span>
+                    <div className="rounded-[26px] border border-[#c49c6b]/40 p-[3px] shadow-2xl">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80"
+                        alt="Colar dourado em detalhe"
+                        loading="lazy"
+                        className="h-80 w-60 rounded-[23px] object-cover"
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

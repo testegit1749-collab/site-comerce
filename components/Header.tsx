@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Menu, X, Search, MessageCircle, Lock, LayoutDashboard } from "lucide-react";
+import { InstagramIcon } from "./InstagramIcon";
 import { useStore } from "@/lib/store";
 import { whatsappLink, catalogMessage } from "@/lib/utils";
 
@@ -126,12 +127,23 @@ export function Header() {
             >
               <MessageCircle size={18} /> Falar no WhatsApp
             </a>
-            <Link
-              href={isAdmin ? "/admin" : "/admin/login"}
-              className="mt-2 flex items-center justify-center gap-2 rounded-full border border-[#141210]/15 px-5 py-3 text-sm font-medium"
-            >
-              <Lock size={15} /> {isAdmin ? "Abrir painel da loja" : "Entrar como lojista"}
-            </Link>
+            <div className="mt-2 grid grid-cols-2 gap-2">
+              <a
+                href={settings.instagram}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Abrir Instagram da loja"
+                className="flex items-center justify-center gap-2 rounded-full border border-[#ee2a7b]/30 bg-gradient-to-r from-[#f9ce34]/10 via-[#ee2a7b]/10 to-[#6228d7]/10 px-5 py-3 text-sm font-semibold text-[#a3246b] transition-transform active:scale-95"
+              >
+                <InstagramIcon size={15} /> Instagram
+              </a>
+              <Link
+                href={isAdmin ? "/admin" : "/admin/login"}
+                className="flex items-center justify-center gap-2 rounded-full border border-[#141210]/15 px-5 py-3 text-sm font-medium"
+              >
+                <Lock size={15} /> {isAdmin ? "Painel" : "Entrar"}
+              </Link>
+            </div>
           </div>
         )}
       </header>

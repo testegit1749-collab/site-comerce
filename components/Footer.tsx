@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { Camera, MessageCircle } from "lucide-react";
+import { MessageCircle } from "lucide-react";
+import { InstagramIcon } from "./InstagramIcon";
 import { useStore } from "@/lib/store";
-import { whatsappLink, infoMessage, orderMessage } from "@/lib/utils";
+import { whatsappLink, infoMessage, orderMessage, instagramHandle } from "@/lib/utils";
 
 export function Footer() {
   const { settings, categories } = useStore();
@@ -52,7 +53,8 @@ export function Footer() {
               target="_blank"
               rel="noreferrer"
               aria-label="WhatsApp"
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white/80 transition-all hover:border-[#c49c6b] hover:bg-[#c49c6b] hover:text-black"
+              title="Chamar no WhatsApp"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white/80 transition-all duration-300 hover:-translate-y-0.5 hover:border-transparent hover:bg-[#25d366] hover:text-white hover:shadow-[0_8px_24px_-6px_rgba(37,211,102,0.6)]"
             >
               <MessageCircle size={17} />
             </a>
@@ -60,10 +62,15 @@ export function Footer() {
               href={settings.instagram}
               target="_blank"
               rel="noreferrer"
-              aria-label="Instagram"
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white/80 transition-all hover:border-[#c49c6b] hover:bg-[#c49c6b] hover:text-black"
+              aria-label="Seguir no Instagram"
+              title={`Seguir ${instagramHandle(settings.instagram)} no Instagram`}
+              className="group relative flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white/80 transition-all duration-300 hover:-translate-y-0.5 hover:border-transparent hover:text-white hover:shadow-[0_8px_24px_-6px_rgba(238,42,123,0.6)]"
             >
-              <Camera size={17} />
+              <span className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] opacity-0 transition-opacity duration-300 group-hover:opacity-100" aria-hidden />
+              <InstagramIcon size={17} className="relative" />
+              <span className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-white px-3 py-1 text-[11px] font-semibold text-black opacity-0 transition-all duration-300 group-hover:-top-10 group-hover:opacity-100" aria-hidden>
+                {instagramHandle(settings.instagram)}
+              </span>
             </a>
           </div>
         </div>

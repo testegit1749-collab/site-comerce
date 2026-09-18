@@ -93,3 +93,13 @@ export function floatingMessage(brand: string): string {
 export function doubtMessage(brand: string): string {
   return `Olá, ${brand}! ✨\nTenho uma dúvida e preciso de ajuda. 💛`;
 }
+
+/** Extrai "@perfil" da URL do Instagram cadastrada (ex: .../eli_luz_semijoias/ -> @eli_luz_semijoias). */
+export function instagramHandle(url: string): string {
+  try {
+    const parts = new URL(url).pathname.split("/").filter(Boolean);
+    return parts[0] ? `@${parts[0]}` : "Instagram";
+  } catch {
+    return "Instagram";
+  }
+}

@@ -5,6 +5,7 @@ import { StoreProvider } from "@/lib/store";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
+import { AdminFab } from "@/components/AdminFab";
 
 const serif = Cormorant_Garamond({ variable: "--font-serif", subsets: ["latin"], weight: ["400", "500", "600", "700"] });
 const serifAccent = Cormorant_Garamond({
@@ -37,6 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <main className="flex-1">{children}</main>
           <Footer />
           <FloatingWhatsApp />
+          <AdminFab />
         </StoreProvider>
       </body>
     </html>
