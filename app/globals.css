@@ -1,26 +1,189 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --color-cream: #faf8f4;
+  --color-ivory: #f4eee3;
+  --color-sand: #ece2d0;
+  --color-noir: #0a0b0d;
+  --color-ink: #141210;
+  --color-smoke: #6f6a61;
+  --color-gold: #c49c6b;
+  --color-gold-deep: #8a6a35;
+  --color-champagne: #f2dbbb;
+  --color-gold-soft: #efe0c3;
+  --color-line: #e7dcc6;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: #c49c6b;
+  color: #0a0b0d;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #f1ebe1;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(#c49c6b, #8a6a35);
+  border-radius: 8px;
+  border: 2px solid #f1ebe1;
+}
+
+.font-serif-display {
+  font-family: var(--font-display);
+  letter-spacing: 0.01em;
+  text-wrap: balance;
+}
+
+.font-accent {
+  font-family: var(--font-serif-accent);
+  font-style: italic;
+  letter-spacing: 0;
+}
+
+/* capitular editorial */
+.prose-luz > p:first-of-type::first-letter {
+  font-family: var(--font-display);
+  font-size: 3.1em;
+  float: left;
+  line-height: 0.85;
+  padding-right: 0.14em;
+  padding-top: 0.05em;
+  color: #8a6a35;
+}
+
+/* botão WhatsApp flutuante */
+@keyframes wa-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.45); }
+  70% { box-shadow: 0 0 0 16px rgba(37, 211, 102, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+}
+.wa-float {
+  animation: wa-pulse 2.6s ease-out infinite;
+}
+
+.glass {
+  background: rgba(250, 248, 244, 0.72);
+  backdrop-filter: blur(18px) saturate(1.4);
+  -webkit-backdrop-filter: blur(18px) saturate(1.4);
+}
+
+.glass-dark {
+  background: rgba(10, 11, 13, 0.55);
+  backdrop-filter: blur(18px) saturate(1.3);
+  -webkit-backdrop-filter: blur(18px) saturate(1.3);
+}
+
+.gold-text {
+  background: linear-gradient(115deg, #8a6a35 0%, #c49c6b 30%, #f6e3bd 50%, #c49c6b 70%, #8a6a35 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gold-pan 7s linear infinite;
+}
+
+@keyframes gold-pan {
+  to { background-position: 200% center; }
+}
+
+.card-shadow {
+  box-shadow: 0 1px 2px rgba(20, 18, 16, 0.05), 0 16px 44px -16px rgba(20, 18, 16, 0.22);
+}
+
+.card-shadow:hover {
+  box-shadow: 0 2px 6px rgba(20, 18, 16, 0.06), 0 28px 64px -16px rgba(20, 18, 16, 0.32);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.snap-row {
+  scroll-snap-type: x mandatory;
+}
+.snap-row > * {
+  scroll-snap-align: start;
+}
+
+/* faixa infinita */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+.animate-marquee-slow {
+  animation: marquee 55s linear infinite;
+}
+
+/* indicador de scroll do hero */
+@keyframes scroll-cue {
+  0% { transform: translateY(-100%); }
+  55% { transform: translateY(100%); }
+  100% { transform: translateY(100%); }
+}
+.scroll-cue-line {
+  animation: scroll-cue 2.2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+/* brilho orbital dourado */
+.gold-glow {
+  background: radial-gradient(closest-side, rgba(196, 156, 107, 0.28), transparent);
+  filter: blur(10px);
+}
+
+/* contorno de texto gigante */
+.text-outline {
+  -webkit-text-stroke: 1px rgba(196, 156, 107, 0.35);
+  color: transparent;
+}
+
+.water-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.16) 45%, rgba(196, 156, 107, 0.16) 52%, transparent 65%);
+  background-size: 250% 250%;
+  animation: shimmer 9s ease-in-out infinite;
+  mix-blend-mode: soft-light;
+}
+
+@keyframes shimmer {
+  0%, 100% { background-position: 120% 0%; }
+  50% { background-position: -20% 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .water-shimmer::after,
+  .animate-marquee,
+  .animate-marquee-slow,
+  .scroll-cue-line,
+  .wa-float,
+  .gold-text { animation: none; }
+  html { scroll-behavior: auto; }
 }

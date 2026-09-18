@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Eli Luz — Catálogo Digital de Bijuterias & Semijoias
 
-## Getting Started
+Site premium + CMS de catálogo pronto para produção. Stack: **Next.js 16 (App Router) + TypeScript + Tailwind v4 + Framer Motion + Supabase**.
 
-First, run the development server:
+## Como rodar
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
+npm run build    # valida produção
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Onde fica o quê
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Rota | O quê |
+|---|---|
+| `/` | Home premium (hero com efeito água, destaques, categorias, novidades, coleção, Instagram) |
+| `/catalogo` | Grid + busca + filtros (categoria, coleção) + ordenação |
+| `/catalogo/[slug]` | Página do produto com galeria, preço antigo/%OFF, parcelas, SEO + JSON-LD e botão WhatsApp |
+| `/sobre`, `/garantia`, `/trocas`, `/guia-de-medidas` | Páginas de confiança (links no rodapé) |
+| `/admin/login` | Login da lojista |
+| `/admin` | Dashboard (totais, ativos, destaques, novidades) |
+| `/admin/produtos` | CRUD completo: novo, editar, duplicar, excluir, destaque, novidade, ativar/pausar, fotos |
+| `/admin/categorias` | CRUD de categorias |
+| `/admin/colecoes` | CRUD de coleções |
+| `/admin/configuracoes` | Marca, banner, WhatsApp, Instagram, preços, aviso do topo |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**Login demo (sem Supabase):** qualquer e-mail + senha `admin123`
 
-## Learn More
+## Atualizar produtos (para a lojista)
 
-To learn more about Next.js, take a look at the following resources:
+1. Entre em `/admin` → **Produtos** → **Novo produto**.
+2. Preencha nome, código, categoria, coleção, descrição, preço.
+3. Adicione fotos (a 1ª vira a capa; arraste com as setas para reordenar).
+4. Marque **Destaque** / **Novidade** se quiser → **Salvar**.
+5. A peça aparece na hora na Home e no Catálogo. Sem código, sem deploy.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+WhatsApp de cada produto monta sozinho:
+Cada produto monta sozinho uma mensagem com nome, código e preço (ex: `Olá, Eli Luz! ✨ Vi no catálogo e me apaixonei... 💎 *Brinco* 🔖 Código...`) — textos centralizados em `lib/utils.ts`, número em **Configurações**.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Supabase (produção)
 
-## Deploy on Vercel
+Sem `.env`, o site roda em **modo local** (localStorage + 12 produtos demo) — perfeito para testar e mostrar.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Para produção real:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Crie um projeto em supabase.com → copie **URL** e **anon key**.
+2. Copie `.env.example` para `.env.local` e preencha `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` e `NEXT_PUBLIC_SITE_URL`.
+3. No **SQL Editor**, rode `supabase/schema.sql` (cria `products`, `categories`, `collections`, `settings` + RLS: leitura pública só de ativos, escrita só autenticado).
+4. Em **Storage**, crie o bucket público `product-images`.
+5. Em **Authentication → Users**, crie o usuário da lojista e entre com ele em `/admin/login`.
+
+O app detecta sozinho: com env configurado lê/escreve no Supabase; sem env usa o modo local.
+
+## Deploy na Vercel
+
+1. Suba para o GitHub, importe na Vercel.
+2. Em **Settings → Environment Variables**, adicione as 3 vars do `.env.example`.
+3. Deploy. Sitemap em `/sitemap.xml`, robots em `/robots.txt`.
+
+## Performance & mobile
+
+- Efeito água em SVG (`feTurbulence` + `feDisplacementMap`) animado por `requestAnimationFrame`, pausado fora da viewport e **desligado** em `prefers-reduced-motion`, mobile fraco ou `save-data`.
+- Imagens: remote Unsplash + Supabase, `avif/webp`, lazy loading, otimização no upload (canvas → WebP 1600px).
+- Mobile-first: menu compacto, filtros colapsáveis, grid 2 colunas, botões grandes.
