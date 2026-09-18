@@ -6,11 +6,12 @@ import { LogIn } from "lucide-react";
 import { useStore } from "@/lib/store";
 
 export default function AdminLoginPage() {
-  const { login, isAdmin } = useStore();
+  const { login, isAdmin, authError } = useStore();
   const router = useRouter();
   const [email, setEmail] = useState("admin@eliluz.com.br");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
+  const [localError, setLocalError] = useState<string | null>(null);
 
   if (isAdmin) {
     router.replace("/admin");
@@ -20,10 +21,14 @@ export default function AdminLoginPage() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setBusy(true);
+    setLocalError(null);
     const ok = await login(email.trim(), password);
     setBusy(false);
     if (ok) router.replace("/admin");
+    else setLocalError("Não foi possível entrar. Confira o motivo abaixo.");
   };
+
+  const errorMsg = authError || localError;
 
   return (
     <div className="mx-auto flex min-h-[70vh] max-w-md flex-col justify-center px-4 py-12">
@@ -45,6 +50,11 @@ export default function AdminLoginPage() {
           <button disabled={busy} className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-[#1a1815] px-6 py-3.5 text-sm font-semibold text-white disabled:opacity-50">
             <LogIn size={16} /> {busy ? "Entrando…" : "Entrar"}
           </button>
+          {errorMsg && (
+            <p className="rounded-2xl bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+              {errorMsg}
+            </p>
+          )}
         </form>
       </div>
     </div>

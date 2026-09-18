@@ -59,6 +59,7 @@ interface Store {
   resetDemo: () => void;
   // auth (local fallback)
   isAdmin: boolean;
+  authError: string | null;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
   changePassword: (current: string, next: string) => Promise<boolean>;
@@ -77,6 +78,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [collections, setCollections] = useState<Collection[]>(SEED_COLLECTIONS);
   const [settings, setSettings] = useState<BrandSettings>(DEFAULT_SETTINGS);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
 
   // initial load: localStorage, then Supabase if configured
   useEffect(() => {
@@ -299,6 +301,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = useCallback(async (email: string, password: string) => {
+    setAuthError(null);
     if (isSupabaseConfigured) {
       try {
         const sb = getSupabase()!;
@@ -308,7 +311,18 @@ export function StoreProvider({ children }: { children: ReactNode }) {
           writeLS(LS_AUTH, true);
           return true;
         }
-      } catch {}
+        const msg = (error.message || "").toLowerCase();
+        if (msg.includes("email not confirmed")) {
+          setAuthError("E-mail não confirmado. Confirme no Supabase > Authentication > Users.");
+        } else if (msg.includes("invalid login credentials")) {
+          setAuthError("E-mail ou senha inválidos. Confira os dados ou redefina a senha no Supabase.");
+        } else {
+          setAuthError(`Falha no login: ${error.message}`);
+        }
+        return false;
+      } catch {
+        // cai para fallback local abaixo
+      }
       // cai para fallback local abaixo
     }
     // Fallback local: qualquer e-mail + senha do painel (padrão admin123, trocável em Configurações)
@@ -317,6 +331,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       writeLS(LS_AUTH, true);
       return true;
     }
+    setAuthError("E-mail ou senha inválidos.");
     return false;
   }, []);
 
@@ -333,6 +348,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   const logout = useCallback(() => {
     setIsAdmin(false);
+    setAuthError(null);
     writeLS(LS_AUTH, false);
     if (isSupabaseConfigured) getSupabase()?.auth.signOut();
   }, []);
@@ -342,9 +358,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       ready, usingSupabase: isSupabaseConfigured, products, categories, collections, settings,
       saveProduct, deleteProduct, duplicateProduct, toggleField,
       saveCategory, deleteCategory, saveCollection, deleteCollection,
-      saveSettings, resetDemo, isAdmin, login, logout, changePassword,
+      saveSettings, resetDemo, isAdmin, authError, login, logout, changePassword,
     }),
-    [ready, products, categories, collections, settings, saveProduct, deleteProduct, duplicateProduct, toggleField, saveCategory, deleteCategory, saveCollection, deleteCollection, saveSettings, resetDemo, isAdmin, login, logout, changePassword]
+    [ready, products, categories, collections, settings, saveProduct, deleteProduct, duplicateProduct, toggleField, saveCategory, deleteCategory, saveCollection, deleteCollection, saveSettings, resetDemo, isAdmin, authError, login, logout, changePassword]
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
